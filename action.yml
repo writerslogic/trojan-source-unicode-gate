@@ -1,5 +1,5 @@
-name: Trojan Source & Hidden Unicode Gate
-description: Fails PRs that add Trojan Source bidi overrides, invisible characters, homoglyphs or confusable identifiers. Signed verdict.
+name: "Trojan Source & Hidden Unicode Gate"
+description: "Fails PRs that add Trojan Source bidi overrides, invisible characters, homoglyphs or confusable identifiers. Signed verdict."
 author: WritersLogic
 branding:
   icon: eye-off
