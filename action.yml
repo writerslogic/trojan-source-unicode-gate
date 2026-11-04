@@ -1,0 +1,45 @@
+name: Trojan Source & Hidden Unicode Gate
+description: Fails PRs that add Trojan Source bidi overrides, invisible characters, homoglyphs or confusable identifiers. Signed verdict.
+author: WritersLogic
+branding:
+  icon: eye-off
+  color: red
+inputs:
+  base-ref:
+    description: "Ref to diff against. Defaults to the pull request base branch."
+    required: false
+  api-key:
+    description: "Hub API key (X-API-KEY). Either this or wallet-private-key is required."
+    required: false
+  wallet-private-key:
+    description: "Base wallet key holding USDC; pays each call with x402 (no gas). Store it as a secret."
+    required: false
+  max-usdc-per-call:
+    description: "Refuse to pay more than this per call."
+    default: "0.25"
+  fail-on:
+    description: "block (fail on a blocking finding), warn (also fail on warnings), or never"
+    default: "block"
+  hub-url:
+    description: "Hub base URL."
+    default: "https://agents.writerslogic.com"
+outputs:
+  merge-approved:
+    description: "true unless the gate blocks"
+    value: ${{ steps.run.outputs.merge-approved }}
+  report:
+    description: "Path to the full signed JSON response."
+    value: ${{ steps.run.outputs.report }}
+runs:
+  using: composite
+  steps:
+    - id: run
+      uses: writerslogic/pre-merge-review-action@v1
+      with:
+        agent: unicode-safety-gate
+        base-ref: ${{ inputs.base-ref }}
+        api-key: ${{ inputs.api-key }}
+        wallet-private-key: ${{ inputs.wallet-private-key }}
+        max-usdc-per-call: ${{ inputs.max-usdc-per-call }}
+        fail-on: ${{ inputs.fail-on }}
+        hub-url: ${{ inputs.hub-url }}
